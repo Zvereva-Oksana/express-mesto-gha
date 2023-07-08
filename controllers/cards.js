@@ -31,7 +31,12 @@ module.exports.deleteCard = (req, res) => {
       }
       return res.send(card);
     })
-    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка.' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Передан несуществующий _id.' });
+      }
+      return res.status(500).send({ message: 'На сервере произошла ошибка.' });
+    });
 };
 
 module.exports.likeCard = (req, res) => {
