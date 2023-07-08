@@ -1,5 +1,4 @@
 const Card = require('../models/card');
-const { isIdValidity } = require('../helpers/utils');
 
 module.exports.getCard = (_req, res) => {
   Card
@@ -24,7 +23,6 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
-  isIdValidity(cardId, res);
   Card
     .findByIdAndRemove(cardId)
     .then((card) => {
@@ -38,7 +36,6 @@ module.exports.deleteCard = (req, res) => {
 
 module.exports.likeCard = (req, res) => {
   const { cardId } = req.params;
-  isIdValidity(cardId, res);
   Card
     .findByIdAndUpdate(
       cardId,
@@ -69,7 +66,6 @@ module.exports.likeCard = (req, res) => {
 
 module.exports.dislikeCard = (req, res) => {
   const { cardId } = req.params;
-  isIdValidity(cardId, res);
   Card
     .findByIdAndUpdate(
       cardId,

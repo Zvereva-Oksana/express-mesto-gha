@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const { isIdValidity } = require('../helpers/utils');
 
 module.exports.getUsers = (req, res) => {
   User
@@ -10,7 +9,6 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserByID = (req, res) => {
   const { userId } = req.params;
-  isIdValidity(userId, res);
   User
     .findById(userId)
     .then((user) => {
