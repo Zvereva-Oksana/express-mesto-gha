@@ -2,6 +2,8 @@ const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequest = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-err');
+const { validateRequest } = require('../utils/helpers');
+const { paramsShemaCards, paramsShemaCardId } = require('../utils/schemas');
 
 module.exports.getCard = (_req, res, next) => {
   Card
@@ -11,6 +13,7 @@ module.exports.getCard = (_req, res, next) => {
 };
 
 module.exports.createCard = (req, res, next) => {
+  validateRequest(paramsShemaCards, req.body);
   const { name, link } = req.body;
   const owner = req.user._id;
   Card
@@ -25,6 +28,7 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
+  validateRequest(paramsShemaCardId, req.params);
   const { cardId } = req.params;
   Card
     .findById(cardId)
@@ -46,6 +50,7 @@ module.exports.deleteCard = (req, res, next) => {
 };
 
 module.exports.likeCard = (req, res, next) => {
+  validateRequest(paramsShemaCardId, req.params);
   const { cardId } = req.params;
   Card
     .findByIdAndUpdate(
@@ -72,6 +77,7 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.dislikeCard = (req, res, next) => {
+  validateRequest(paramsShemaCardId, req.params);
   const { cardId } = req.params;
   Card
     .findByIdAndUpdate(

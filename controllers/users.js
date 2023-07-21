@@ -5,6 +5,11 @@ const NotFoundError = require('../errors/not-found-err');
 const BadRequest = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
+const { validateRequest } = require('../utils/helpers');
+const {
+  paramsShemaSingup, paramsShemaSingin,
+  paramsShemaUpdateUser, paramsShemaUpdateAvatar, paramsShemaUserId,
+} = require('../utils/schemas');
 
 module.exports.getUsers = (req, res, next) => {
   User
@@ -14,6 +19,7 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getUserByID = (req, res, next) => {
+  validateRequest(paramsShemaUserId, req.params);
   const { userId } = req.params;
   User
     .findById(userId)
@@ -32,6 +38,7 @@ module.exports.getUserByID = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
+  validateRequest(paramsShemaSingup, req.body);
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -54,6 +61,7 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.updateUser = (req, res, next) => {
+  validateRequest(paramsShemaUpdateUser, req.body);
   const { name, about } = req.body;
   User
     .findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
@@ -72,6 +80,7 @@ module.exports.updateUser = (req, res, next) => {
 };
 
 module.exports.updateAvatar = (req, res, next) => {
+  validateRequest(paramsShemaUpdateAvatar, req.body);
   const { avatar } = req.body;
   User
     .findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
@@ -90,12 +99,13 @@ module.exports.updateAvatar = (req, res, next) => {
 };
 
 module.exports.login = (req, res, next) => {
+  validateRequest(paramsShemaSingin, req.body, 401);
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key');
       res.cookie('jwt', token, { httpOnly: true }, { maxAge: 3600000 * 24 * 7 });
-      res.send('Успешная авторизация');
+      res.send({ message: 'Успешная авторизация' });
     })
     .catch(() => {
       next(new UnauthorizedError('Передан неверный JWT'));

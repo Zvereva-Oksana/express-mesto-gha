@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/signin', login);
 app.post('/signup', createUser);
-// app.use(auth);
+
 app.use('/users', auth, userRouter);
 app.use('/cards', auth, cardRouter);
 app.use('*', (req, res) => {
