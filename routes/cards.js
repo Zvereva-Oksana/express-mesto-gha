@@ -15,19 +15,19 @@ router.post('/', celebrate({
 }), createCard);
 
 router.delete('/:cardId', celebrate({
-  [Segments.BODY]: Joi.object().keys({
+  [Segments.PARAMS]: Joi.object().keys({
     cardId: Joi.objectId().required(),
-  }),
+  }).unknown(true),
 }), deleteCard);
 
 router.put('/:cardId/likes', celebrate({
-  [Segments.BODY]: Joi.object().keys({
+  [Segments.PARAMS]: Joi.object().keys({
     cardId: Joi.objectId().required(),
   }).unknown(true),
 }), likeCard);
 
 router.delete('/:cardId/likes', celebrate({
-  [Segments.BODY]: Joi.object().keys({
+  [Segments.PARAMS]: Joi.object().keys({
     cardId: Joi.objectId().required(),
   }).unknown(true),
 }), dislikeCard);
