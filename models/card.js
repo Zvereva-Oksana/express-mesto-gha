@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { regexUrl } = require('../utils/constant');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -10,7 +11,7 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    match: /https?:\/\/(www)?[a-z0-9].{2,}/,
+    match: regexUrl,
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
